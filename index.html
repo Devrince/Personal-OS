@@ -1,95 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>My OS</title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            overflow: hidden;
-            font-family: helvetica, Arial, sans-serif;
-            color: white;
-            background: linear-gradient(135deg, #1e1b4b, #312e81);
-        }
-
-        #splash {
-            position: fixed;
-            inset: 0;
-            background: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            transition: opacity 0.8s ease;
-            z-index: 10;
-        }
-        #splash.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        #splash img {
-            width: 120px;
-        }
-        #enter {
-            padding: 10px 28px;
-            border: none;
-            border-radius: 20px;
-            background: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        #taskbar {
-            position: fixed;
-            bottom: 14px;
-            left: 50%;
-            transform: translate(-50%);
-            display: flex;
-            gap: 12px;
-            padding: 10px 16px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-        }
-        .app-icon {
-            width: 48px;
-            height: 48px;
-            border: none;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            font-size: 22px;
-            cursor: pointer;
-            transition: transform 0.15s ease, background 0.15s ease;
-        }
-        .app-icon:hover {
-            background: rgba(255, 255, 255, 0.35);
-            transform: scale(1.1);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My OS</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- pdf.js lets the browser read PDF files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
-<body> 
-    <div id="splash">
-        <img src="blob:https://gemini.google.com/27adee8e-0509-4336-a7da-6307884ee9d9" alt="My OS Logo">
-        <h1>Welcome to My OS</h1>
-        <button id="enter">Enter</button>
-    </div>
-    <div id="taskbar">
-    <button class="app-icon"title="Notes">📝</button>
-    <button class="app-icon" title="PDF Reader">📄</button>
-    <button class="app-icon" title="Music">🎵</button>
-    </div>
+<body>
 
-    <script>
-        const splash = document.getElementById('splash');
-        const enterButton = document.getElementById('enter');
+  <!-- Splash screen -->
+  <div id="splash">
+    <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#3f352d" stroke-width="3"/>
+      <circle cx="50" cy="50" r="22" fill="#c9a882"/>
+      <path d="M50 4 V16 M50 84 V96 M4 50 H16 M84 50 H96" stroke="#3f352d" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <h1>Welcome to My OS</h1>
+    <p class="subtitle">Take a breath. Your desk is ready.</p>
+    <button id="enter">Enter</button>
+  </div>
 
-        enterButton.addEventListener('click', () => {
-            splash.classList.add('hidden');
-        });
-    </script>
+  <!-- Top bar -->
+  <div id="topbar">
+    <span class="brand">My OS</span>
+    <span id="clock"></span>
+  </div>
+
+  <!-- Notes window -->
+  <div class="window notes-window" id="notes-window" style="left: 90px; top: 110px;">
+    <div class="window-header">
+      <button class="close-btn" aria-label="Close"></button>
+      <span class="window-title">Notes</span>
+      <span class="spacer"></span>
+    </div>
+    <div class="window-body notes-body">
+      <div class="note-list" id="note-list"></div>
+      <div class="note-editor">
+        <div class="note-tools">
+          <button class="btn" id="new-note">+ New</button>
+          <button class="btn" id="delete-note">Delete</button>
+        </div>
+        <textarea id="note-text" placeholder="Start writing..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- PDF window -->
+  <div class="window pdf-window" id="pdf-window" style="left: 200px; top: 130px;">
+    <div class="window-header">
+      <button class="close-btn" aria-label="Close"></button>
+      <span class="window-title">PDF Reader</span>
+      <span class="spacer"></span>
+    </div>
+    <div class="window-body pdf-body">
+      <label class="btn">
+        Open PDF
+        <input type="file" id="pdf-input" accept="application/pdf" class="hidden-input">
+      </label>
+      <div class="pdf-nav">
+        <button class="btn" id="pdf-prev">◀</button>
+        <span id="pdf-info">No PDF open</span>
+        <button class="btn" id="pdf-next">▶</button>
+      </div>
+      <div class="pdf-view">
+        <canvas id="pdf-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Music window -->
+  <div class="window music-window" id="music-window" style="left: 330px; top: 170px;">
+    <div class="window-header">
+      <button class="close-btn" aria-label="Close"></button>
+      <span class="window-title">Music</span>
+      <span class="spacer"></span>
+    </div>
+    <div class="window-body music-body">
+      <label class="btn">
+        Choose songs
+        <input type="file" id="music-input" accept="audio/*" multiple class="hidden-input">
+      </label>
+      <div class="cover" id="cover"></div>
+      <p id="track-name">No song loaded</p>
+      <div class="controls">
+        <button class="btn round" id="prev-track">⏮</button>
+        <button class="btn round" id="play-btn">▶</button>
+        <button class="btn round" id="next-track">⏭</button>
+      </div>
+      <div id="playlist"></div>
+    </div>
+  </div>
+
+  <!-- Bottom app bar -->
+  <div id="taskbar">
+    <button class="app-btn" data-target="notes-window" title="Notes">📝</button>
+    <button class="app-btn" data-target="pdf-window" title="PDF Reader">📄</button>
+    <button class="app-btn" data-target="music-window" title="Music">🎵</button>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
-
-  
