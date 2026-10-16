@@ -1,0 +1,357 @@
+:root {
+  --cream: #f7f1e8;
+  --beige: #e9dcc9;
+  --sand: #d6c2a5;
+  --ink: #3f352d;
+  --muted: #8c7d6e;
+  --panel: rgba(255, 251, 245, 0.8);
+  --line: rgba(63, 53, 45, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Inter", system-ui, sans-serif;
+  color: var(--ink);
+  background: linear-gradient(160deg, var(--cream) 0%, var(--beige) 100%);
+}
+
+h1, .brand {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: normal;
+}
+
+/* ---------- Splash ---------- */
+#splash {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: var(--cream);
+  transition: opacity 0.8s ease;
+}
+#splash.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.logo {
+  width: 110px;
+  height: 110px;
+}
+#splash h1 {
+  margin: 8px 0 0;
+  font-size: 34px;
+}
+.subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+#enter {
+  margin-top: 12px;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--cream);
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+#enter:hover {
+  transform: scale(1.04);
+}
+
+/* ---------- Top bar ---------- */
+#topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 18px;
+  background: rgba(255, 251, 245, 0.45);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  font-size: 16px;
+  letter-spacing: 0.5px;
+}
+#clock {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ---------- Bottom app bar ---------- */
+#taskbar {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9000;
+  display: flex;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(63, 53, 45, 0.12);
+}
+.app-btn {
+  width: 46px;
+  height: 46px;
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.app-btn:hover {
+  background: var(--beige);
+  transform: translateY(-3px);
+}
+
+/* ---------- Windows ---------- */
+.window {
+  position: absolute;
+  z-index: 10;
+  display: none;
+  flex-direction: column;
+  max-width: calc(100vw - 24px);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 16px 40px rgba(63, 53, 45, 0.18);
+  overflow: hidden;
+}
+.window-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(233, 220, 201, 0.6);
+  border-bottom: 1px solid var(--line);
+  cursor: grab;
+  user-select: none;
+}
+.window-header:active {
+  cursor: grabbing;
+}
+.window-title {
+  font-size: 14px;
+  color: var(--muted);
+}
+.spacer {
+  width: 14px;
+}
+.close-btn {
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--sand);
+  cursor: pointer;
+}
+.close-btn:hover {
+  background: #b89a78;
+}
+.window-body {
+  flex: 1;
+  min-height: 0;
+  padding: 16px;
+  overflow: auto;
+}
+.hidden-input {
+  display: none;
+}
+
+/* Shared button style */
+.btn {
+  display: inline-block;
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--ink);
+  font-size: 13px;
+  cursor: pointer;
+}
+.btn:hover {
+  background: var(--beige);
+}
+.btn.round {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 18px;
+}
+
+/* Window sizes */
+.notes-window {
+  width: 560px;
+  height: 400px;
+}
+.pdf-window {
+  width: 520px;
+  height: 480px;
+}
+.music-window {
+  width: 340px;
+}
+
+/* ---------- Notes app ---------- */
+.notes-body {
+  display: flex;
+  padding: 0;
+}
+.note-list {
+  width: 170px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  border-right: 1px solid var(--line);
+}
+.note-item {
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 14px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.note-item:hover {
+  background: var(--beige);
+}
+.note-item.active {
+  background: var(--sand);
+}
+.note-editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 16px;
+}
+.note-tools {
+  display: flex;
+  gap: 8px;
+}
+#note-text {
+  flex: 1;
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: var(--ink);
+  font: 15px/1.6 Georgia, serif;
+}
+#note-text:disabled {
+  color: var(--muted);
+}
+
+/* ---------- PDF app ---------- */
+.pdf-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.pdf-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.pdf-view {
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+}
+#pdf-canvas {
+  max-width: 100%;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(63, 53, 45, 0.15);
+}
+
+/* ---------- Music app ---------- */
+.music-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.cover {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--cream) 0 14%, var(--sand) 15% 60%, var(--ink) 61%);
+  box-shadow: 0 10px 24px rgba(63, 53, 45, 0.2);
+}
+.cover.spinning {
+  animation: spin 8s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+#track-name {
+  margin: 0;
+  font-size: 15px;
+  text-align: center;
+}
+.controls {
+  display: flex;
+  gap: 12px;
+}
+#playlist {
+  width: 100%;
+  max-height: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+#playlist button {
+  padding: 8px 10px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+#playlist button:hover,
+#playlist button.active {
+  background: var(--beige);
+}
