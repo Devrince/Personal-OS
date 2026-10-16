@@ -1,18 +1,95 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
 <html>
+<head>
+    <meta charset="UTF-8">
+    <title>My OS</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            font-family: helvetica, Arial, sans-serif;
+            color: white;
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+        }
 
+        #splash {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            transition: opacity 0.8s ease;
+            z-index: 10;
+        }
+        #splash.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #splash img {
+            width: 120px;
+        }
+        #enter {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 20px;
+            background: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
 
-<body>
-<h1>Welcome to My OS</h1>
-<h2>Introduction</h2>
-<p>"Hello World!"</p>
-<img src="https://www.redbubble.com/i/photographic-print/Shin-Chan-robot-Kantam-by-robotradiactivo/164438631/zltf"
+        #taskbar {
+            position: fixed;
+            bottom: 14px;
+            left: 50%;
+            transform: translate(-50%);
+            display: flex;
+            gap: 12px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+        .app-icon {
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            font-size: 22px;
+            cursor: pointer;
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+        .app-icon:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body> 
+    <div id="splash">
+        <img src="blob:https://gemini.google.com/27adee8e-0509-4336-a7da-6307884ee9d9" alt="My OS Logo">
+        <h1>Welcome to My OS</h1>
+        <button id="enter">Enter</button>
+    </div>
+    <div id="taskbar">
+    <button class="app-icon"title="Notes">📝</button>
+    <button class="app-icon" title="PDF Reader">📄</button>
+    <button class="app-icon" title="Music">🎵</button>
+    </div>
+
+    <script>
+        const splash = document.getElementById('splash');
+        const enterButton = document.getElementById('enter');
+
+        enterButton.addEventListener('click', () => {
+            splash.classList.add('hidden');
+        });
+    </script>
 </body>
-
-
-
-
-
-
 </html>
+
+  
